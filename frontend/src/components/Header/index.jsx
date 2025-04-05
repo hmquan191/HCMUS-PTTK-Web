@@ -1,7 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
-
 const Header = () => {
   return (
     <AppBar position="static">
@@ -11,7 +10,7 @@ const Header = () => {
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2 }}>
-          <Button color="inherit" component={Link} to="/">
+          <Button color='inherit' component={Link} to="/">
             Trang Chủ
           </Button>
           <Button color="inherit" component={Link} to="/dang-ky">
