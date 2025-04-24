@@ -40,3 +40,16 @@ export async function addEmployee(name, mail, role){
 
 
 // console.log(company[5].name);
+// CREATE DATABASE DB;
+// USE DB;
+
+// CREATE TABLE company (
+// id integer PRIMARY KEY AUTO_INCREMENT,
+// mail  VARCHAR(255) NOT NULL,
+// role TEXT NOT NULL
+// );
+
+// INSERT INTO company (id, mail,role)
+// VALUES
+// (1, 'a@gmail.com', 'dev'),
+// (2, 'a@gmail.com','lead');
