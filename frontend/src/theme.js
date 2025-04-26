@@ -5,10 +5,10 @@ const theme = createTheme({
   palette: {
     mode: 'light', // hoặc 'light'
     primary: {
-      main: '#ff4757', // xanh lá sẫm
+      main: '#F8E79B', // xanh lá sẫm
     },
     secondary: {
-      main: '#7bed9f', // trắng nhẹ
+      main: '#7bed9f', // trắng nhẹ 
     },
     background: {
       default: '#ffffff', // đen tuyền
@@ -16,7 +16,7 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Francois One", "Roboto", "Helvetica", "Arial", sans-serif',
   },
 });
 

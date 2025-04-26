@@ -9,7 +9,7 @@ const Header = () => {
     <AppBar position="static">
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h6" component="div">
-          Trang Quản Lý
+          ACCI
         </Typography>
 
 
@@ -18,16 +18,16 @@ const Header = () => {
             Trang Chủ
           </Button>
           <Button color="inherit" component={Link} to="/dang-ky">
-            Đăng Ký
+            Lập Phiếu Đăng Ký
           </Button>
           <Button color="inherit" component={Link} to="/gia-han">
-            Gia Hạn
+            Lập Phiếu Gia Hạn
           </Button>
           <Button color="inherit" component={Link} to="/thanh-toan">
-            Thanh Toán
+            Lập Phiếu Thanh Toán
           </Button>
           <Button color="inherit" component={Link} to="/cap-chung-chi">
-            Cấp Chứng Chỉ
+            Tra Cứu Chứng Chỉ
           </Button>
         </Box>
       </Toolbar>
