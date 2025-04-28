@@ -5,18 +5,18 @@ const theme = createTheme({
   palette: {
     mode: 'light', // hoặc 'light'
     primary: {
-      main: '#F8E79B', // xanh lá sẫm
+      main: '#FDC95F', // xanh lá sẫm
     },
     secondary: {
-      main: '#7bed9f', // trắng nhẹ 
+      main: '#FF9549', // trắng nhẹ 
     },
     background: {
       default: '#ffffff', // đen tuyền
-      paper: '#e84118',
+      paper: '#FDC95F',
     },
   },
   typography: {
-    fontFamily: '"Francois One", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Cal Sans", "Roboto", "Helvetica", "Arial", sans-serif',
   },
 });
 
