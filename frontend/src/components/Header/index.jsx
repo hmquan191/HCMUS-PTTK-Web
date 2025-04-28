@@ -1,24 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập từ localStorage
-    const loggedIn = localStorage.getItem('isLoggedIn');
-    if (loggedIn) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
-  const handleLogout = () => {
-    // Xóa thông tin đăng nhập và cập nhật lại trạng thái
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-  };
+  const { isLoggedIn, logout } = useContext(AuthContext);
 
   return (
     <AppBar position="static">
@@ -44,7 +30,7 @@ const Header = () => {
             <Button color="inherit" component={Link} to="/cap-chung-chi">
               Tra Cứu Chứng Chỉ
             </Button>
-            <Button color="error" component={Link} to="/" onClick={handleLogout}>
+            <Button color="error" component={Link} to="/" onClick={logout}>
               Đăng Xuất
             </Button>
           </Box>

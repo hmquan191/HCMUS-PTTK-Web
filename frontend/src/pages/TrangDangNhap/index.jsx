@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { TextField, Button, Typography, Container, Box } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const TrangDangNhap = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Gửi request đến backend để kiểm tra đăng nhập
       const response = await axios.post('http://localhost:5000/', {
         username,
         password,
       });
 
       if (response.status === 200) {
-        // Lưu trạng thái đăng nhập vào localStorage
-        localStorage.setItem('isLoggedIn', true);
         localStorage.setItem('user', JSON.stringify(response.data.user));
-
-        // Chuyển hướng đến trang chính (trang-chu)
+        login(); // Cập nhật AuthContext
         navigate('/trang-chu');
       }
     } catch (error) {
