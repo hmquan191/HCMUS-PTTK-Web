@@ -1,9 +1,12 @@
-import React from 'react'
+import React from 'react';
+import { Container, Typography } from '@mui/material';
 
-const Trangchu = () => {
+const TrangChu = () => {
   return (
-    <div>Trangchu</div>
-  )
-}
+    <Container>
+      <Typography variant="h4">Chào mừng bạn đến với Trang Chủ!</Typography>
+    </Container>
+  );
+};
 
-export default Trangchu
+export default TrangChu;

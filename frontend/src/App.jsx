@@ -7,6 +7,7 @@ import TrangDangKy from './pages/TrangDangKy';
 import TrangGiaHan from './pages/TrangGiaHan';
 import TrangThanhToan from './pages/TrangThanhToan';
 import CapChungChi from './pages/CapChungChi';
+import TrangDangNhap from './pages/TrangDangNhap';
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<TrangChu />} />
+        <Route path="/" element={<TrangDangNhap />} />
+        <Route path="/trang-chu" element={<TrangChu />} />
         <Route path="/dang-ky" element={<TrangDangKy />} />
         <Route path="/gia-han" element={<TrangGiaHan />} />
         <Route path="/thanh-toan" element={<TrangThanhToan />} />
