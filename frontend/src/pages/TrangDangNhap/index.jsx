@@ -15,7 +15,7 @@ const TrangDangNhap = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/', {
+      const response = await axios.post('http://localhost:5000/api/login', {
         username,
         password,
       });
