@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import renewalRouter from './routes/renewalRoutes.js';
 import authRouter from './routes/auth.js'; // Import the auth router
 
+import payRouter from './routes/payRoutes.js'; // Import the pay router
 dotenv.config();
 const app = express();
 // Middleware
@@ -38,3 +39,6 @@ app.listen(5000, () => {
 
 app.use('/api', renewalRouter); // Sử dụng router cho các API liên quan đến gia hạn
 app.use('/api', authRouter); // Sử dụng router cho các API liên quan đến gia hạn
+
+app.use('/api', payRouter); // Sử dụng router cho các API liên quan đến thanh toán
+
