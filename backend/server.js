@@ -3,11 +3,12 @@ import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
 import renewalRouter from './routes/renewalRoutes.js';
 import authRouter from './routes/auth.js'; // Import the auth router
 import registrationRouter from './routes/registrationRoutes.js';
 import payRouter from './routes/payRoutes.js'; // Import the pay router
+import pdtRouter from './routes/pDuThiRoute.js';
+import tracuucc from './routes/tracuucc.js';
 dotenv.config();
 const app = express();
 // Middleware
@@ -41,4 +42,5 @@ app.use('/api', renewalRouter); // Sử dụng router cho các API liên quan đ
 app.use('/api', authRouter); // Sử dụng router cho các API liên quan đến gia hạn
 app.use('/api', registrationRouter); // Sử dụng router cho các API liên quan đến đăng ký
 app.use('/api', payRouter); // Sử dụng router cho các API liên quan đến thanh toán
-
+app.use('/api', pdtRouter); // Sử dụng router cho các API liên quan đến phiếu dự thi
+app.use('/api', tracuucc);
