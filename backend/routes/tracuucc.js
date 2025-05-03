@@ -58,4 +58,17 @@ router.get('/chungchi/by-code/:maChungChi', async (req, res) => {
   }
 });
 
+// Update certificate status
+router.put('/chungchi/update/:maChungChi', async (req, res) => {
+  const { maChungChi } = req.params;
+  const { newStatus } = req.body;
+  try {
+    const result = await traCuuChungChiDAO.updateCertificateStatus(maChungChi, newStatus);
+    res.status(200).json(result);
+  } catch (err) {
+    console.error('Error updating certificate status:', err);
+    res.status(500).json({ message: 'Lỗi khi cập nhật trạng thái chứng chỉ' });
+  }
+});
+
 export default router;

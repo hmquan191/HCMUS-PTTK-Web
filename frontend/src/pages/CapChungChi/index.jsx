@@ -8,6 +8,7 @@ const CapChungChi = () => {
   const [maChungChiList, setMaChungChiList] = useState([]);
   const [selectedMaChungChi, setSelectedMaChungChi] = useState('');
   const [chungChiList, setChungChiList] = useState([]);
+  const [selectedChungChi, setSelectedChungChi] = useState(null);
   const [error, setError] = useState('');
 
   // Fetch all PhieuDuThi and MA_CHUNGCHI on component mount
@@ -36,9 +37,14 @@ const CapChungChi = () => {
     fetchMaChungChi();
   }, []);
 
-  // Handle row selection
+  // Handle row selection for PhieuDuThi
   const handleRowSelect = (phieu) => {
     setSelectedPhieuDuThi(phieu);
+  };
+
+  // Handle row selection for ChungChi
+  const handleChungChiRowSelect = (chungChi) => {
+    setSelectedChungChi(chungChi);
   };
 
   // Handle search by selected MA_PHIEUDUTHI
@@ -70,6 +76,29 @@ const CapChungChi = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Lỗi khi tra cứu chứng chỉ');
       setChungChiList([]);
+    }
+  };
+
+  // Handle update certificate status
+  const handleUpdateStatus = async () => {
+    if (!selectedChungChi || selectedChungChi.TRANGTHAINHAN === 'Đã nhận') {
+      return;
+    }
+    try {
+      await axios.put(`http://localhost:5000/api/chungchi/update/${selectedChungChi.MA_CHUNGCHI}`, {
+        newStatus: 'Đã nhận',
+      });
+      // Refresh the ChungChi list based on the current search method
+      if (selectedPhieuDuThi) {
+        const response = await axios.get(`http://localhost:5000/api/chungchi/${selectedPhieuDuThi.MA_PHIEUDUTHI}`);
+        setChungChiList(response.data);
+      } else if (selectedMaChungChi) {
+        const response = await axios.get(`http://localhost:5000/api/chungchi/by-code/${selectedMaChungChi}`);
+        setChungChiList(response.data);
+      }
+      setError('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Lỗi khi cập nhật trạng thái');
     }
   };
 
@@ -199,7 +228,15 @@ const CapChungChi = () => {
               <TableBody>
                 {chungChiList.length > 0 ? (
                   chungChiList.map((chungChi) => (
-                    <TableRow key={chungChi.MA_CHUNGCHI}>
+                    <TableRow
+                      key={chungChi.MA_CHUNGCHI}
+                      onClick={() => handleChungChiRowSelect(chungChi)}
+                      sx={{
+                        cursor: 'pointer',
+                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#e0e0e0' : 'inherit',
+                        '&:hover': { backgroundColor: '#f5f5f5' },
+                      }}
+                    >
                       <TableCell>{chungChi.MA_CHUNGCHI}</TableCell>
                       <TableCell>{chungChi.TENCHUNGCHI}</TableCell>
                       <TableCell>{chungChi.KETQUA}</TableCell>
@@ -219,6 +256,15 @@ const CapChungChi = () => {
               </TableBody>
             </Table>
           </TableContainer>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateStatus}
+            disabled={!selectedChungChi || selectedChungChi.TRANGTHAINHAN === 'Đã nhận'}
+            sx={{ mt: 2 }}
+          >
+            Cập nhật
+          </Button>
         </Box>
       </Box>
     </Container>
