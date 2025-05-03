@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Typography, Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Button, Typography, Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel, FormControl, TextField } from '@mui/material';
 import axios from 'axios';
 
 // Helper function to format date to dd/mm/yyyy
@@ -15,6 +15,7 @@ const formatDate = (dateString) => {
 const CapChungChi = () => {
   const [phieuDuThiList, setPhieuDuThiList] = useState([]);
   const [selectedPhieuDuThi, setSelectedPhieuDuThi] = useState(null);
+  const [maPhieuDuThiInput, setMaPhieuDuThiInput] = useState('');
   const [maChungChiList, setMaChungChiList] = useState([]);
   const [selectedMaChungChi, setSelectedMaChungChi] = useState('');
   const [chungChiList, setChungChiList] = useState([]);
@@ -50,21 +51,18 @@ const CapChungChi = () => {
   // Handle row selection for PhieuDuThi
   const handleRowSelect = (phieu) => {
     setSelectedPhieuDuThi(phieu);
+    setMaPhieuDuThiInput(phieu.MA_PHIEUDUTHI); // Sync input with selected row
   };
 
-  // Handle row selection for ChungChi
-  const handleChungChiRowSelect = (chungChi) => {
-    setSelectedChungChi(chungChi);
-  };
-
-  // Handle search by selected MA_PHIEUDUTHI
+  // Handle search by selected MA_PHIEUDUTHI or manual input
   const handleSearchByPhieuDuThi = async () => {
-    if (!selectedPhieuDuThi) {
-      setError('Vui lòng chọn một phiếu dự thi');
+    const maPhieuDuThiToSearch = maPhieuDuThiInput || (selectedPhieuDuThi ? selectedPhieuDuThi.MA_PHIEUDUTHI : '');
+    if (!maPhieuDuThiToSearch) {
+      setError('Vui lòng chọn hoặc nhập mã phiếu dự thi');
       return;
     }
     try {
-      const response = await axios.get(`http://localhost:5000/api/chungchi/${selectedPhieuDuThi.MA_PHIEUDUTHI}`);
+      const response = await axios.get(`http://localhost:5000/api/chungchi/${maPhieuDuThiToSearch}`);
       setChungChiList(response.data);
       setError('');
     } catch (err) {
@@ -99,8 +97,8 @@ const CapChungChi = () => {
         newStatus: 'Đã nhận',
       });
       // Refresh the ChungChi list based on the current search method
-      if (selectedPhieuDuThi) {
-        const response = await axios.get(`http://localhost:5000/api/chungchi/${selectedPhieuDuThi.MA_PHIEUDUTHI}`);
+      if (selectedPhieuDuThi || maPhieuDuThiInput) {
+        const response = await axios.get(`http://localhost:5000/api/chungchi/${maPhieuDuThiInput || selectedPhieuDuThi.MA_PHIEUDUTHI}`);
         setChungChiList(response.data);
       } else if (selectedMaChungChi) {
         const response = await axios.get(`http://localhost:5000/api/chungchi/by-code/${selectedMaChungChi}`);
@@ -120,15 +118,34 @@ const CapChungChi = () => {
         </Typography>
         {error && <Typography color="error">{error}</Typography>}
 
-        {/* Thông Tin Dự Thi (GridView) */}
+        {/* Thông Tin Dự Thi (GridView with Search Input) */}
         <Box sx={{ mb: 3 }}>
           <Typography variant="h5" gutterBottom>
             Thông Tin Dự Thi
           </Typography>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 2 }}>
+            <TextField
+              label="Mã Phiếu Dự Thi"
+              value={maPhieuDuThiInput}
+              onChange={(e) => {
+                setMaPhieuDuThiInput(e.target.value);
+                setSelectedPhieuDuThi(null); // Clear selection when typing
+              }}
+              sx={{ flex: 1 }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSearchByPhieuDuThi}
+              disabled={!maPhieuDuThiInput && !selectedPhieuDuThi}
+            >
+              Tìm Kiếm
+            </Button>
+          </Box>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead sx={{ backgroundColor: 'black' }}>
-                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#ffca28' }}>
                   <TableCell><strong>Mã Phiếu Dự Thi</strong></TableCell>
                   <TableCell><strong>Lần Gia Hạn</strong></TableCell>
                   <TableCell><strong>Mã Phiếu Đăng Ký</strong></TableCell>
@@ -139,7 +156,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Loại Đánh Giá</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
+              <TableBody>
                 {phieuDuThiList.length > 0 ? (
                   phieuDuThiList.map((phieu) => (
                     <TableRow
@@ -147,7 +164,8 @@ const CapChungChi = () => {
                       onClick={() => handleRowSelect(phieu)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#FDC95F' : 'inherit',
+                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#e0e0e0' : 'inherit',
+                        '&:hover': { backgroundColor: '#f5f5f5' },
                       }}
                     >
                       <TableCell>{phieu.MA_PHIEUDUTHI}</TableCell>
@@ -168,15 +186,6 @@ const CapChungChi = () => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSearchByPhieuDuThi}
-            disabled={!selectedPhieuDuThi}
-            sx={{ mt: 2 }}
-          >
-            Tìm Kiếm
-          </Button>
         </Box>
 
         {/* Tra cứu theo Mã Chứng Chỉ (Dropdown) */}
@@ -221,8 +230,8 @@ const CapChungChi = () => {
           </Typography>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead sx={{ backgroundColor: 'black' }}>
-                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: '#ffca28' }}>
                   <TableCell><strong>Mã Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Tên Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Kết Quả</strong></TableCell>
@@ -234,7 +243,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Ngày Dự Thi</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
+              <TableBody>
                 {chungChiList.length > 0 ? (
                   chungChiList.map((chungChi) => (
                     <TableRow
@@ -242,7 +251,8 @@ const CapChungChi = () => {
                       onClick={() => handleChungChiRowSelect(chungChi)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#FDC95F' : 'inherit',
+                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#e0e0e0' : 'inherit',
+                        '&:hover': { backgroundColor: '#f5f5f5' },
                       }}
                     >
                       <TableCell>{chungChi.MA_CHUNGCHI}</TableCell>
