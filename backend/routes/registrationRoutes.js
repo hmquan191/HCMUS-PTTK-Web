@@ -33,7 +33,7 @@ router.get('/schedules', async (req, res) => {
 });
 
 // Get list of THISINH from KHACHHANG
-router.get('/candidates/:maKhachHang', async (req, res) => {
+router.get('/candidates', async (req, res) => {
   const { maKhachHang } = req.params;
   try {
     const candidate = await thiSinh.getThiSinhByKhachHang(maKhachHang);

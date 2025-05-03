@@ -1,20 +1,6 @@
 import { pool } from '../database.js';
 
 class ThiSinh {
-  async getAllThiSinh() {
-    const sql = 
-    `SELECT MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI
-    FROM THISINH
-    `;
-    try {
-      const [results] = await pool.query(sql);
-      return results;
-    } catch (err) {
-      console.error('Error fetching ThiSinh:', err);
-      throw err;
-    }
-  }
-
   async getThiSinhByKhachHang(maKhachHang) {
     const sql = `
       SELECT MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI
