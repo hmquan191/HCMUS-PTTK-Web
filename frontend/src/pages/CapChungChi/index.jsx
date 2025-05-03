@@ -173,8 +173,7 @@ const CapChungChi = () => {
                       onClick={() => handleRowSelect(phieu)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#e0e0e0' : 'inherit',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#FDC95F' : 'inherit',
                       }}
                     >
                       <TableCell>{phieu.MA_PHIEUDUTHI}</TableCell>
@@ -260,8 +259,7 @@ const CapChungChi = () => {
                       onClick={() => handleChungChiRowSelect(chungChi)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#e0e0e0' : 'inherit',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#FDC95F' : 'inherit',
                       }}
                     >
                       <TableCell>{chungChi.MA_CHUNGCHI}</TableCell>
