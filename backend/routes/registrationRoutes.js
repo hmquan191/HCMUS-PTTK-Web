@@ -34,17 +34,28 @@ router.get('/schedules', async (req, res) => {
 
 // Get list of THISINH from KHACHHANG
 router.get('/candidates', async (req, res) => {
-  const { maKhachHang } = req.params;
+  const customerId = req.query.customerId;
+
   try {
-    const candidate = await thiSinh.getThiSinhByKhachHang(maKhachHang);
-    if (candidate) {
-      res.status(200).json(candidate);
-    } else {
-      res.status(404).json({ message: 'Candidates not found' });
+    if (!customerId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Thiếu customerId trong query string.',
+      });
     }
-  } catch (err) {
-    console.error('Error searching candidates:', err);
-    res.status(500).json({ message: 'Error searching candidates' });
+
+    const danhSachThiSinh = await thiSinh.getThiSinhByKhachHang(customerId);
+    res.status(200).json({
+      success: true,
+      data: danhSachThiSinh,
+    });
+  } catch (error) {
+    console.error('Lỗi khi lấy thí sinh theo khách hàng:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Lỗi khi lấy danh sách thí sinh.',
+      error: error.message,
+    });
   }
 });
 
