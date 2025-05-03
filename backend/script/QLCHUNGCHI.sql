@@ -1,3 +1,4 @@
+
 -- CHẠY TRONG MYSQL WORKBENCH
 -- Tạo cơ sở dữ liệu QLCHUNGCHI với các bảng và dữ liệu phù hợp với script JavaScript
 -- Đảm bảo khóa ngoại chính xác, dữ liệu thống nhất, hỗ trợ các truy vấn JOIN
@@ -206,7 +207,10 @@ CREATE TABLE CHUNGCHI (
 INSERT INTO TAIKHOAN (MA_TK, TEN_DANGNHAP, MATKHAU) VALUES
 ('TK001', 'admin1', 'adminpass1'),
 ('TK002', 'admin2', 'adminpass2'),
-('TK003', 'admin3', 'adminpass3');
+('TK003', 'admin3', 'adminpass3'),
+('TK004', 'kh1', 'khpass1'),
+('TK005', 'kh2', 'khpass2'),
+('TK006', 'kh3', 'khpass3');
 
 -- Insert vào PHONGTHI
 INSERT INTO PHONGTHI (MA_PHONG, TEN_PHONG, SUCCHUA, DIADIEM) VALUES
@@ -228,9 +232,9 @@ INSERT INTO NHANVIEN (MA_NV, HOTEN, NGAYSINH, GIOITINH, SDT, EMAIL, DIACHI, LOAI
 
 -- Insert vào KHACHHANG (Tên tiếng Việt đầy đủ, email dựa trên tên)
 INSERT INTO KHACHHANG (MA_KH, TEN_KH, EMAIL, SDT, LOAI_KH, MA_TK) VALUES
-('KH001', 'Lê Thị Hồng Nhung', 'nhunglth@gmail.com', '0988111222', 'Cá nhân', 'TK001'),
-('KH002', 'Nguyễn Minh Tuấn', 'tuannm@gmail.com', '0977222333', 'Cá nhân', 'TK002'),
-('KH003', 'Trần Văn Khánh', 'khanhtv@gmail.com', '0966333444', 'Cá nhân', 'TK003');
+('KH001', 'Lê Thị Hồng Nhung', 'nhunglth@gmail.com', '0988111222', 'Cá nhân', 'TK004'),
+('KH002', 'Nguyễn Minh Tuấn', 'tuannm@gmail.com', '0977222333', 'Cá nhân', 'TK005'),
+('KH003', 'Trần Văn Khánh', 'khanhtv@gmail.com', '0966333444', 'Đơn vị', 'TK006');
 
 -- Insert vào LICHTHI
 INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
@@ -266,14 +270,14 @@ INSERT INTO PHANCONGCOITHI (MA_LICHTHI, MA_NV) VALUES
 INSERT INTO THISINH (MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI, MA_KH, MA_PHIEUDANGKY) VALUES
 ('TS001', 'Lê Thị Hồng Nhung', '1998-04-12', 'Nữ', 'nhunglth@gmail.com', '0988111222', '123456789012', '101 Nguyễn Trãi, Quận 5, TP.HCM', 'KH001', 'PDK001'),
 ('TS002', 'Nguyễn Minh Tuấn', '1995-09-25', 'Nam', 'tuannm@gmail.com', '0977222333', '987654321098', '202 Phạm Văn Đồng, Quận Gò Vấp, TP.HCM', 'KH002', 'PDK002'),
-('TS003', 'Trần Văn Khánh', '1997-02-18', 'Nam', 'khanhtv@gmail.com', '0966333444', '456789123456', '303 Lý Thái Tổ, Quận 10, TP.HCM', 'KH003', 'PDK003');
-
+('TS003', 'Trần Văn Khánh', '1997-02-18', 'Nam', 'khanhtv@gmail.com', '0966333444', '456789123456', '303 Lý Thái Tổ, Quận 10, TP.HCM', 'KH003', 'PDK003'),
+('TS004', 'Trần Văn Hinh', '1997-02-20', 'Nam', 'khanhtv@gmail.com', '0966333555', '456789123457', '303 Lý Thái Tổ, Quận 10, TP.HCM', 'KH003', 'PDK003');
 -- Insert vào PHIEUDUTHI
 INSERT INTO PHIEUDUTHI (MA_PHIEUDUTHI, LAN_GIAHAN, MA_PHIEUDANGKY, NV_LAP, MA_LICHTHI, MA_TS) VALUES
 ('PDT001', 0, 'PDK001', 'NV001', 'LT001', 'TS001'),
 ('PDT002', 0, 'PDK002', 'NV002', 'LT002', 'TS002'),
-('PDT003', 1, 'PDK003', 'NV003', 'LT003', 'TS003');
-
+('PDT003', 1, 'PDK003', 'NV003', 'LT003', 'TS003'),
+('PDT004', 1, 'PDK003', 'NV003', 'LT003', 'TS003');
 -- Insert vào BAITHI
 INSERT INTO BAITHI (MA_BAITHI, TEN_BAITHI, HINHTHUCTHI, THOIGIANTHI, MA_PHIEUDUTHI, MA_LICHTHI, DONVICHAM) VALUES
 ('BT001', 'Bài thi chứng chỉ A', 'Trắc nghiệm', 60, 'PDT001', 'LT001', 'DV001'),
@@ -289,7 +293,7 @@ INSERT INTO PHIEUGIAHAN (MA_PHIEUGIAHAN, LYDO_GIAHAN, NGAYLAP, TINHTRANG_THANHTO
 -- Insert vào CHUNGCHI
 INSERT INTO CHUNGCHI (MA_CHUNGCHI, TENCHUNGCHI, KETQUA, DIEMSO, NGAYCAP, NGAYHETHAN, TRANGTHAINHAN, NV_GHINHAN, MA_PHIEUDUTHI, MA_KH) VALUES
 ('CC001', 'Chứng chỉ Tin học A', 'Đạt', 85, '2025-07-01', '2030-07-01', 'Đã nhận', 'NV001', 'PDT001', 'KH001'),
-('CC002', 'Chứng chỉ Tin học B', 'Đạt', 90, '2025-07-05', '2030-07-05', 'Chưa nhận', 'NV002', 'PDT002', 'KH002'),
+('CC002', 'Chứng chỉ Ngoại ngữ B', 'Đạt', 90, '2025-07-05', '2030-07-05', 'Chưa nhận', 'NV002', 'PDT002', 'KH002'),
 ('CC003', 'Chứng chỉ Tin học A', 'Không', 65, '2025-07-15', '2030-07-15', 'Chưa nhận', 'NV003', 'PDT003', 'KH003');
 
 -- ===== Kiểm tra dữ liệu =====
