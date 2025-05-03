@@ -16,6 +16,16 @@ import {
   Autocomplete,
 } from '@mui/material';
 
+// Helper function to format date to dd/mm/yyyy
+const formatDate = (dateString) => {
+  if (!dateString) return ''; // Handle null or undefined
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const TrangThanhToan = () => {
   const [registrations, setRegistrations] = useState([]);
   const [payments, setPayments] = useState([]);
@@ -23,12 +33,12 @@ const TrangThanhToan = () => {
   const [searchId, setSearchId] = useState('');
   const [paymentData, setPaymentData] = useState({
     MA_PHIEUTHANHTOAN: '',
-    NGAYLAP: new Date().toISOString().split('T')[0],
-    TRANGTHAI_THANHTOAN: 'ChuaThanhToan', // Default to non-null value
+    NGAYLAP: new Date().toISOString().split('T')[0], // Still send ISO format to API
+    TRANGTHAI_THANHTOAN: 'ChuaThanhToan',
     TONGTIEN: '',
     NGAYTHANHTOAN: null,
-    GIAMGIA: '0', // Default to 0 for nullable field
-    NV_LAP: 'NV001', // Replace with logged-in staff ID in production
+    GIAMGIA: '0',
+    NV_LAP: 'NV001',
     MA_PHIEUDANGKY: '',
     MA_KH: '',
   });
@@ -72,7 +82,7 @@ const TrangThanhToan = () => {
   // Search registration ticket by ID
   const handleSearch = async () => {
     if (!searchId) {
-      fetchRegistrations(); // Reset to full list if search is empty
+      fetchRegistrations();
       return;
     }
     try {
@@ -111,7 +121,6 @@ const TrangThanhToan = () => {
 
   // Handle payment ticket creation
   const handleCreatePayment = async () => {
-    // Validate required fields
     const requiredFields = [
       'MA_PHIEUTHANHTOAN',
       'NGAYLAP',
@@ -128,7 +137,6 @@ const TrangThanhToan = () => {
       }
     }
 
-    // Log paymentData for debugging
     console.log('Submitting paymentData:', paymentData);
 
     try {
@@ -152,8 +160,8 @@ const TrangThanhToan = () => {
           MA_KH: '',
         });
         setSelectedRegistration(null);
-        fetchPayments(); // Refresh payment list
-        fetchRegistrations(); // Refresh registration list
+        fetchPayments();
+        fetchRegistrations();
       } else {
         showSnackbar(data.message || 'Error creating payment ticket', 'error');
       }
@@ -223,10 +231,10 @@ const TrangThanhToan = () => {
                 }}
               >
                 <TableCell>{registration.MA_PHIEUDANGKY}</TableCell>
-                <TableCell>{registration.NGAYLAP}</TableCell>
+                <TableCell>{formatDate(registration.NGAYLAP)}</TableCell>
                 <TableCell>{registration.TRANGTHAI_THANHTOAN}</TableCell>
                 <TableCell>{registration.TEN_KH}</TableCell>
-                <TableCell>{registration.NGAYTHI}</TableCell>
+                <TableCell>{formatDate(registration.NGAYTHI)}</TableCell>
                 <TableCell>{registration.GIOTHI}</TableCell>
               </TableRow>
             ))}
@@ -258,11 +266,10 @@ const TrangThanhToan = () => {
                 <TableCell>{payment.MA_PHIEUTHANHTOAN}</TableCell>
                 <TableCell>{payment.MA_KH}</TableCell>
                 <TableCell>{payment.TEN_KH}</TableCell>
-                <TableCell>{payment.NGAYLAP}</TableCell>
+                <TableCell>{formatDate(payment.NGAYLAP)}</TableCell>
                 <TableCell>{payment.TRANGTHAI_THANHTOAN}</TableCell>
                 <TableCell>{payment.TONGTIEN}</TableCell>
                 <TableCell>{payment.GIAMGIA}</TableCell>
-
               </TableRow>
             ))}
           </TableBody>
@@ -283,14 +290,14 @@ const TrangThanhToan = () => {
           value={paymentData.MA_PHIEUDANGKY}
           onChange={(e) => handleInputChange('MA_PHIEUDANGKY', e.target.value)}
           required
-          disabled={!!selectedRegistration} // Disable if a registration is selected
+          disabled={!!selectedRegistration}
         />
         <TextField
           label="Mã Khách Hàng"
           value={paymentData.MA_KH}
           onChange={(e) => handleInputChange('MA_KH', e.target.value)}
           required
-          disabled={!!selectedRegistration} // Disable if a registration is selected
+          disabled={!!selectedRegistration}
         />
         <TextField
           label="Tổng Tiền"
