@@ -32,14 +32,19 @@ router.get('/schedules', async (req, res) => {
   }
 });
 
-// Get list of THISINH
-router.get('/candidates', async (req, res) => {
+// Get list of THISINH from KHACHHANG
+router.get('/candidates/:maKhachHang', async (req, res) => {
+  const { maKhachHang } = req.params;
   try {
-    const candidate = await thiSinh.getAllThiSinh();
-    res.status(200).json(candidate);
+    const candidate = await thiSinh.getThiSinhByKhachHang(maKhachHang);
+    if (candidate) {
+      res.status(200).json(candidate);
+    } else {
+      res.status(404).json({ message: 'Registration ticket not found' });
+    }
   } catch (err) {
-    console.error('Error fetching THISINH:', err);
-    res.status(500).json({ message: 'Error fetching THISINH' });
+    console.error('Error searching registration:', err);
+    res.status(500).json({ message: 'Error searching registration ticket' });
   }
 });
 

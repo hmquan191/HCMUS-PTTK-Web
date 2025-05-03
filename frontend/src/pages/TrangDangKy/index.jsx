@@ -20,31 +20,7 @@ const TrangDangKy = () => {
     MA_KH: '',
   });
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
-/*
-  const customers = [
-    { id: 1, name: "Nguyễn Văn A", phone: "0907087381", email: "nva@gmail.com", type: "Khách hàng tự do" },
-    { id: 2, name: "Trần Thị B", phone: "0907087381", email: "ttb@gmail.com", type: "Khách hàng đơn vị" },
-    // thêm dữ liệu khách hàng
-  ];
 
-  const examSchedules = [
-    { id: 1, date: "2025-05-10", hour: "8:00", type: "Ngoại ngữ", number: 10, room: "C33" },
-    { id: 2, date: "2025-05-20", hour: "8:00", type: "Tin học", number: 10, room: "I53" },
-    // thêm dữ liệu lịch thi
-  ];
-
-  const staffMembers = [
-    { id: 1, name: "Lê Thị C" },
-    { id: 2, name: "Phạm Văn D" },
-    // thêm dữ liệu nhân viên
-  ];
-
-  const statuses = [
-    { id: "wait", label: "Chờ thanh toán" },
-    { id: "paid", label: "Đã thanh toán" },
-    // thêm dữ liệu trạng thái
-  ];
-*/
   // Fetch customers
   const fetchCustomers = async () => {
     try {
@@ -60,7 +36,7 @@ const TrangDangKy = () => {
     }
   };
 
-  // Fetch examschedules
+  // Fetch exam schedules
   const fetchExamSchedules = async () => {
     try {
       const response = await fetch('http://localhost:5000/api/schedules');
@@ -76,9 +52,9 @@ const TrangDangKy = () => {
   };
 
   // Fetch candidates
-  const fetchCandidates = async () => {
+  const fetchCandidates = async (customerId) => {
     try {
-      const response = await fetch('http://localhost:5000/api/candidates');
+      const response = await fetch(`http://localhost:5000/api/candidates?customerId=${customerId}`);
       const data = await response.json();
       if (response.ok) {
         setCandidates(data);
@@ -88,7 +64,7 @@ const TrangDangKy = () => {
     } catch (err) {
       showSnackbar('Error fetching candidates', 'error');
     }
-  };
+  };  
 
   const handleSubmit = () => {
     const registrationData = {
@@ -108,6 +84,7 @@ const TrangDangKy = () => {
       MA_KH: customer.MA_KH,
     });
     console.log("Khách hàng đã chọn:", customer);
+    fetchCandidates(customer.MA_KH);
   };
 
   const handleSelectExamSchedules = (examSchedules) => {
@@ -117,6 +94,56 @@ const TrangDangKy = () => {
       MA_LICHTHI: examSchedules.MA_LICHTHI,
     });
     console.log("Lịch thi đã chọn:", examSchedules);
+  };
+
+  // Handle registration creation
+  const handleCreateRegistration = async () => {
+    // Validate required fields
+    const requiredFields = [
+      'MA_PHIEUDANGKY',
+      'NGAYLAP',
+      'TRANGTHAI_THANHTOAN',
+      'NV_LAP',
+      'MA_LICHTHI',
+      'MA_KH',
+    ];
+    for (const field of requiredFields) {
+      if (!registrationData[field]) {
+        showSnackbar(`Vui lòng nhập ${field}`, 'error');
+        return;
+      }
+    }
+
+    // Log paymentData for debugging
+    console.log('Submitting registrationData:', registrationData);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/registrations', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(registrationData),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        showSnackbar('Registration created successfully', 'success');
+        setRegistrationData({
+          MA_PHIEUDANGKY: '',
+          NGAYLAP: new Date().toISOString().split('T')[0],
+          TRANGTHAI_THANHTOAN: 'Chờ thanh toán', // Default to non-null value
+          NV_LAP: 'NV001', // Replace with logged-in staff ID in production
+          MA_LICHTHI: '',
+          MA_KH: '',
+        });
+        setSelectedCustomer(null);
+        setSelectedExamSchedule(null);
+        fetchCustomers(); // Refresh customer list
+        fetchExamSchedules(); // Refresh exam schedule list
+      } else {
+        showSnackbar(data.message || 'Error creating registration', 'error');
+      }
+    } catch (err) {
+      showSnackbar('Error creating registration', 'error');
+    }
   };
 
   // Show snackbar notification
@@ -131,12 +158,12 @@ const TrangDangKy = () => {
 
   // Fetch data on component mount
   useEffect(() => {
-    fetchRegistrations();
-    fetchPayments();
+    fetchCustomers();
+    fetchExamSchedules();
   }, []);
-  
+
   return (
-    <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 3, display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box sx={{ maxWidth: 1000, mx: "auto", textAlign: "center", p: 3, display: "flex", flexDirection: "column", gap: 2 }}>
       <Typography variant="h5" textAlign="center">LẬP PHIẾU ĐĂNG KÝ</Typography>
       {/* Bảng danh sách khách hàng */}
       <Typography variant="h6" textAlign="left" mb={0.25}>Danh sách khách hàng</Typography>
@@ -175,7 +202,44 @@ const TrangDangKy = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      
+
+      {/* Bảng danh sách thí sinh */}
+      <Typography variant="h6" textAlign="left" mb={0.25}>Danh sách thí sinh</Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead sx={{ backgroundColor: "black" }}>
+            <TableRow sx={{"& .MuiTableCell-root": { color: "white", textAlign: "center", } }}>
+              <TableCell>Mã thí sinh</TableCell>
+              <TableCell>Họ tên</TableCell>
+              <TableCell>Ngày sinh</TableCell>
+              <TableCell>Giới tính</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Số điện thoại</TableCell>
+              <TableCell>CCCD</TableCell>
+              <TableCell>Địa chỉ</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
+            {candidates.map((candidates) => (
+              <TableRow 
+                key={candidates.MA_LICHTHI} 
+                sx={{ 
+                  "& .MuiTableCell-root": { textAlign: "center", }}}
+              >
+                <TableCell>{candidates.MA_TS}</TableCell>
+                <TableCell>{candidates.HOTEN}</TableCell>
+                <TableCell>{new Date(candidates.NGAYSINH).toLocaleDateString("vi-VN")}</TableCell>
+                <TableCell>{candidates.GIOITINH}</TableCell>
+                <TableCell>{candidates.EMAIL}</TableCell>
+                <TableCell>{candidates.SDT}</TableCell>
+                <TableCell>{candidates.CCCD}</TableCell>
+                <TableCell>{candidates.DIACHI}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       {/* Bảng danh sách lịch thi */}
       <Typography variant="h6" textAlign="left" mb={0.25}>Danh sách lịch thi</Typography>
       <TableContainer component={Paper}>
@@ -187,6 +251,8 @@ const TrangDangKy = () => {
               <TableCell>Loại đánh giá</TableCell>
               <TableCell>Số lượng đăng ký</TableCell>
               <TableCell>Phòng thi</TableCell>
+              <TableCell>Sức chứa</TableCell>
+              <TableCell>Địa điểm</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
@@ -202,11 +268,13 @@ const TrangDangKy = () => {
                   backgroundColor: selectedExamSchedule?.MA_LICHTHI === examSchedules.MA_LICHTHI ? "#FDC95F" : "inherit", // màu nền khi chọn
                 }}
               >
-                <TableCell>{examSchedules.NGAYTHI}</TableCell>
+                <TableCell>{new Date(examSchedules.NGAYTHI).toLocaleDateString("vi-VN")}</TableCell>
                 <TableCell>{examSchedules.GIOTHI}</TableCell>
                 <TableCell>{examSchedules.LOAI_DANHGIA}</TableCell>
                 <TableCell>{examSchedules.SOLUONG_DANGKY}</TableCell>
                 <TableCell>{examSchedules.TEN_PHONG}</TableCell>
+                <TableCell>{examSchedules.SUCCHUA}</TableCell>
+                <TableCell>{examSchedules.DIADIEM}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -214,10 +282,22 @@ const TrangDangKy = () => {
       </TableContainer>
 
       <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
-        <Button variant="contained" color="primary" sx={{ width: "fit-content" }}>
+        <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={handleCreateRegistration}>
           Lập Phiếu
         </Button>
       </Box>
+
+      {/* Snackbar for Notifications */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }

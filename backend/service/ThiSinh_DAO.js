@@ -23,7 +23,7 @@ class ThiSinh {
     `;
     try {
       const [results] = await pool.query(sql, [maKhachHang]);
-      return results.length > 0 ? results[0] : null;
+      return results;
     } catch (err) {
       console.error('Error fetching ThiSinh by KhachHang:', err);
       throw err;
