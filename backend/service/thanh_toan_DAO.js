@@ -10,6 +10,7 @@ class ThanhToan_DAO {
       FROM PHIEUDANGKY p
       JOIN KHACHHANG k ON p.MA_KH = k.MA_KH
       JOIN LICHTHI l ON p.MA_LICHTHI = l.MA_LICHTHI
+      WHERE p.TRANGTHAI_THANHTOAN = 'chờ thanh toán'
     `;
     try {
       const [results] = await pool.query(sql);
