@@ -31,7 +31,7 @@ router.get('/schedules', async (req, res) => {
 });
 
 // Get list of PHIEUDANGKY
-router.get('/registrations', async (req, res) => {
+router.get('/registrations/all', async (req, res) => {
   try {
     const registration = await phieuDangKy.getAllPhieuDangKy();
     res.status(200).json(registration);
