@@ -119,6 +119,22 @@ const TrangDangKy = () => {
     console.log("Lịch thi đã chọn:", examSchedules);
   };
 
+  // Show snackbar notification
+  const showSnackbar = (message, severity) => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  // Close snackbar
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchRegistrations();
+    fetchPayments();
+  }, []);
+  
   return (
     <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 3, display: "flex", flexDirection: "column", gap: 2 }}>
       <Typography variant="h5" textAlign="center">LẬP PHIẾU ĐĂNG KÝ</Typography>
