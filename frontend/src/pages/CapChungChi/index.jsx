@@ -243,8 +243,8 @@ const CapChungChi = () => {
                       onClick={() => handleChungChiRowSelect(chungChi)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#e0e0e0' : 'inherit',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#FDC95F' : 'inherit',
+                        '&:hover': { backgroundColor: '' },
                       }}
                     >
                       <TableCell>{chungChi.MA_CHUNGCHI}</TableCell>

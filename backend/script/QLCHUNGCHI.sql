@@ -200,7 +200,7 @@ DROP TABLE IF EXISTS CHUNGCHI;
 CREATE TABLE CHUNGCHI (
     MA_CHUNGCHI CHAR(10),
     TENCHUNGCHI VARCHAR(50),
-    KETQUA VARCHAR(3),
+    KETQUA VARCHAR(10),
     DIEMSO INT,
     NGAYCAP DATE,
     NGAYHETHAN DATE,
@@ -215,91 +215,92 @@ CREATE TABLE CHUNGCHI (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
--- ==insert
+-- Insert vào TAIKHOAN (Tài khoản admin với tên đăng nhập admin1, admin2...)
 INSERT INTO TAIKHOAN (MA_TK, TEN_DANGNHAP, MATKHAU) VALUES
-('TK001', 'user1', 'pass1'),
-('TK002', 'user2', 'pass2'),
-('TK003', 'user3', 'pass3');
+('TK001', 'admin1', 'adminpass1'),
+('TK002', 'admin2', 'adminpass2'),
+('TK003', 'admin3', 'adminpass3');
 
 -- Insert vào PHONGTHI
 INSERT INTO PHONGTHI (MA_PHONG, TEN_PHONG, SUCCHUA, DIADIEM) VALUES
-('P001', 'Phòng A1', 50, 'Tầng 1 - Cơ sở chính'),
-('P002', 'Phòng B2', 40, 'Tầng 2 - Cơ sở phụ');
+('P001', 'Phòng A1', 50, 'Tầng 1 - Cơ sở chính, TP.HCM'),
+('P002', 'Phòng B2', 40, 'Tầng 2 - Cơ sở phụ, TP.HCM'),
+('P003', 'Phòng C3', 60, 'Tầng 3 - Cơ sở chính, TP.HCM');
 
 -- Insert vào DONVICHAMTHI
 INSERT INTO DONVICHAMTHI (MA_DONVI, TEN_DONVI) VALUES
 ('DV001', 'Đơn vị chấm thi A'),
-('DV002', 'Đơn vị chấm thi B');
+('DV002', 'Đơn vị chấm thi B'),
+('DV003', 'Đơn vị chấm thi C');
 
--- Insert vào NHANVIEN
+-- Insert vào NHANVIEN (Nhân viên sử dụng tài khoản admin)
 INSERT INTO NHANVIEN (MA_NV, HOTEN, NGAYSINH, GIOITINH, SDT, EMAIL, DIACHI, LOAI_NV, TINHTRANG_COITHI, MA_TK) VALUES
-('NV001', 'Nguyễn Văn A', '1990-01-01', 'Nam', '0909123456', 'a@gmail.com', 'Quận 1, TP.HCM', 'Admin', 'Đang làm', 'TK001');
+('NV001', 'Nguyễn Văn Hùng', '1988-03-15', 'Nam', '0909123456', 'hungnv@gmail.com', '123 Lê Lợi, Quận 1, TP.HCM', 'Admin', 'Đang làm', 'TK001'),
+('NV002', 'Trần Thị Mai', '1992-07-22', 'Nữ', '0918234567', 'maitt@gmail.com', '456 Nguyễn Huệ, Quận 3, TP.HCM', 'Admin', 'Đang làm', 'TK002'),
+('NV003', 'Phạm Quốc Anh', '1990-11-10', 'Nam', '0937345678', 'anhpq@gmail.com', '789 Võ Văn Tần, Quận 7, TP.HCM', 'Admin', 'Đang làm', 'TK003');
 
--- Insert vào KHACHHANG
+-- Insert vào KHACHHANG (Tên tiếng Việt đầy đủ, email dựa trên tên)
 INSERT INTO KHACHHANG (MA_KH, TEN_KH, EMAIL, SDT, LOAI_KH, MA_TK) VALUES
-('KH001', 'Trần Thị B', 'b@gmail.com', '0911222333', 'Cá nhân', 'TK002');
-INSERT INTO KHACHHANG (MA_KH, TEN_KH, EMAIL, SDT, LOAI_KH, MA_TK) VALUES
-('KH002', 'Trần Thị C', 'b@gmail.com', '0911222333', 'Cá nhân', 'TK001');
+('KH001', 'Lê Thị Hồng Nhung', 'nhunglth@gmail.com', '0988111222', 'Cá nhân', 'TK001'),
+('KH002', 'Nguyễn Minh Tuấn', 'tuannm@gmail.com', '0977222333', 'Cá nhân', 'TK002'),
+('KH003', 'Trần Văn Khánh', 'khanhtv@gmail.com', '0966333444', 'Cá nhân', 'TK003');
+
 -- Insert vào LICHTHI
 INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
-('LT001', '2025-06-15', '08:00:00', 'A', 30, 'P001');
-INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
-('LT002', '2025-06-15', '08:00:00', 'A', 30, 'P001');
-INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
-('LT003', '2025-07-15', '08:00:00', 'A', 30, 'P001');
-INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
-('LT004', '2025-01-15', '08:00:00', 'A', 30, 'P001');
+('LT001', '2025-06-15', '08:00:00', 'A', 30, 'P001'),
+('LT002', '2025-06-20', '13:00:00', 'B', 25, 'P002'),
+('LT003', '2025-07-10', '09:00:00', 'A', 40, 'P003');
+
 -- Insert vào PHIEUDANGKY
 INSERT INTO PHIEUDANGKY (MA_PHIEUDANGKY, NGAYLAP, TRANGTHAI_THANHTOAN, NV_LAP, MA_LICHTHI, MA_KH) VALUES
-('PDK001', '2025-05-01', 'Đã thanh toán', 'NV001', 'LT001', 'KH001');
-INSERT INTO PHIEUDANGKY (MA_PHIEUDANGKY, NGAYLAP, TRANGTHAI_THANHTOAN, NV_LAP, MA_LICHTHI, MA_KH) VALUES
-('PDK002', '2025-06-01', 'Đã thanh toán', 'NV001', 'LT001', 'KH002');
-INSERT INTO PHIEUDANGKY (MA_PHIEUDANGKY, NGAYLAP, TRANGTHAI_THANHTOAN, NV_LAP, MA_LICHTHI, MA_KH) VALUES
-('PDK003', '2025-06-01', 'Đã thanh toán', 'NV001', 'LT004', 'KH002');
+('PDK001', '2025-05-01', 'Đã thanh toán', 'NV001', 'LT001', 'KH001'),
+('PDK002', '2025-05-05', 'Đã thanh toán', 'NV002', 'LT002', 'KH002'),
+('PDK003', '2025-06-01', 'Chưa thanh toán', 'NV003', 'LT003', 'KH003');
+
 -- Insert vào PHIEUTHANHTOAN
 INSERT INTO PHIEUTHANHTOAN (MA_PHIEUTHANHTOAN, NGAYLAP, TRANGTHAI_THANHTOAN, TONGTIEN, NGAYTHANHTOAN, GIAMGIA, NV_LAP, MA_PHIEUDANGKY, MA_KH) VALUES
-('PTT001', '2025-05-02', 'Đã thanh toán', 1000000, '2025-05-02', 0, 'NV001', 'PDK001', 'KH001');
+('PTT001', '2025-05-02', 'Đã thanh toán', 1000000, '2025-05-02', 0, 'NV001', 'PDK001', 'KH001'),
+('PTT002', '2025-05-06', 'Đã thanh toán', 800000, '2025-05-06', 0.1, 'NV002', 'PDK002', 'KH002'),
+('PTT003', '2025-06-02', 'Chưa thanh toán', 1200000, NULL, 0, 'NV003', 'PDK003', 'KH003');
 
 -- Insert vào HOADON
 INSERT INTO HOADON (MA_HD, NGAYLAP, TONGTIEN, PHUONGTHUC_THANHTOAN, NV_LAP, MA_PHIEUTHANHTOAN, MA_KH) VALUES
-('HD001', '2025-05-02', 1000000, 'Chuyển khoản', 'NV001', 'PTT001', 'KH001');
+('HD001', '2025-05-02', 1000000, 'Chuyển khoản', 'NV001', 'PTT001', 'KH001'),
+('HD002', '2025-05-06', 720000, 'Tiền mặt', 'NV002', 'PTT002', 'KH002'),
+('HD003', '2025-06-02', 1200000, 'Chuyển khoản', 'NV003', 'PTT003', 'KH003');
 
 -- Insert vào PHANCONGCOITHI
 INSERT INTO PHANCONGCOITHI (MA_LICHTHI, MA_NV) VALUES
-('LT001', 'NV001');
+('LT001', 'NV001'),
+('LT002', 'NV002'),
+('LT003', 'NV003');
 
 -- Insert vào THISINH
 INSERT INTO THISINH (MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI, MA_KH, MA_PHIEUDANGKY) VALUES
-('TS001', 'Lê Văn C', '2000-08-20', 'Nam', 'c@gmail.com', '0988777666', '123456789012', 'Quận 3, TP.HCM', 'KH001', 'PDK001');
-INSERT INTO THISINH (MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI, MA_KH, MA_PHIEUDANGKY) VALUES
-('TS002', 'Lê Văn D', '2000-08-20', 'Nam', 'c@gmail.com', '0988777666', '123456789012', 'Quận 3, TP.HCM', 'KH001', 'PDK001');
+('TS001', 'Lê Thị Hồng Nhung', '1998-04-12', 'Nữ', 'nhunglth@gmail.com', '0988111222', '123456789012', '101 Nguyễn Trãi, Quận 5, TP.HCM', 'KH001', 'PDK001'),
+('TS002', 'Nguyễn Minh Tuấn', '1995-09-25', 'Nam', 'tuannm@gmail.com', '0977222333', '987654321098', '202 Phạm Văn Đồng, Quận Gò Vấp, TP.HCM', 'KH002', 'PDK002'),
+('TS003', 'Trần Văn Khánh', '1997-02-18', 'Nam', 'khanhtv@gmail.com', '0966333444', '456789123456', '303 Lý Thái Tổ, Quận 10, TP.HCM', 'KH003', 'PDK003');
 
 -- Insert vào PHIEUDUTHI
 INSERT INTO PHIEUDUTHI (MA_PHIEUDUTHI, LAN_GIAHAN, MA_PHIEUDANGKY, NV_LAP, MA_LICHTHI, MA_TS) VALUES
-('PDT001', 0, 'PDK001', 'NV001', 'LT001', 'TS001');
-INSERT INTO PHIEUDUTHI (MA_PHIEUDUTHI, LAN_GIAHAN, MA_PHIEUDANGKY, NV_LAP, MA_LICHTHI, MA_TS)
-VALUES ('PDT002', 0, 'PDK001', 'NV001', 'LT003', 'TS002');
-INSERT INTO PHIEUDUTHI (MA_PHIEUDUTHI, LAN_GIAHAN, MA_PHIEUDANGKY, NV_LAP, MA_LICHTHI, MA_TS)
-VALUES ('PDT003', 0, 'PDK003', 'NV001', 'LT004', 'TS002');
+('PDT001', 0, 'PDK001', 'NV001', 'LT001', 'TS001'),
+('PDT002', 0, 'PDK002', 'NV002', 'LT002', 'TS002'),
+('PDT003', 1, 'PDK003', 'NV003', 'LT003', 'TS003');
+
 -- Insert vào BAITHI
 INSERT INTO BAITHI (MA_BAITHI, TEN_BAITHI, HINHTHUCTHI, THOIGIANTHI, MA_PHIEUDUTHI, MA_LICHTHI, DONVICHAM) VALUES
-('BT001', 'Bài thi chứng chỉ A', 'Trắc nghiệm', 60, 'PDT001', 'LT001', 'DV001');
+('BT001', 'Bài thi chứng chỉ A', 'Trắc nghiệm', 60, 'PDT001', 'LT001', 'DV001'),
+('BT002', 'Bài thi chứng chỉ B', 'Tự luận', 90, 'PDT002', 'LT002', 'DV002'),
+('BT003', 'Bài thi chứng chỉ A', 'Trắc nghiệm', 60, 'PDT003', 'LT003', 'DV003');
 
 -- Insert vào PHIEUGIAHAN
 INSERT INTO PHIEUGIAHAN (MA_PHIEUGIAHAN, LYDO_GIAHAN, NGAYLAP, TINHTRANG_THANHTOAN, PHIGIAHAN, NV_LAP, MA_PHIEUDUTHI) VALUES
-('PGH001', 'Bận công tác', '2025-06-01', 'Đã thanh toán', 50000, 'NV001', 'PDT001');
+('PGH001', 'Bận công tác', '2025-06-01', 'Đã thanh toán', 50000, 'NV001', 'PDT001'),
+('PGH002', 'Lý do cá nhân', '2025-06-05', 'Chưa thanh toán', 50000, 'NV002', 'PDT002'),
+('PGH003', 'Sức khỏe', '2025-06-10', 'Đã thanh toán', 50000, 'NV003', 'PDT003');
 
 -- Insert vào CHUNGCHI
 INSERT INTO CHUNGCHI (MA_CHUNGCHI, TENCHUNGCHI, KETQUA, DIEMSO, NGAYCAP, NGAYHETHAN, TRANGTHAINHAN, NV_GHINHAN, MA_PHIEUDUTHI, MA_KH) VALUES
-('CC001', 'Chứng chỉ Tin học A', 'Đạt', 85, '2025-07-01', '2030-07-01', 'Đã nhận', 'NV001', 'PDK001', 'KH001');
--- ===== Kiểm tra =====
-SELECT * FROM KHACHHANG;
-SELECT * FROM BAITHI;
-select * from taikhoan;
-
-SELECT p.MA_PHIEUDUTHI, p.LAN_GIAHAN, l.NGAYTHI
-      FROM PHIEUDUTHI p
-      JOIN LICHTHI l ON p.MA_LICHTHI = l.MA_LICHTHI;
-      
-      
-
+('CC001', 'Chứng chỉ Tin học A', 'Đạt', 85, '2025-07-01', '2030-07-01', 'Đã nhận', 'NV001', 'PDK001', 'KH001'),
+('CC002', 'Chứng chỉ Tin học B', 'Đạt', 90, '2025-07-05', '2030-07-05', 'Chưa nhận', 'NV002', 'PDK002', 'KH002'),
+('CC003', 'Chứng chỉ Tin học A', 'Không đạt', 65, '2025-07-15', '2030-07-15', 'Chưa nhận', 'NV003', 'PDK003', 'KH003');
