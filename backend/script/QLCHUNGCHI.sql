@@ -207,10 +207,7 @@ CREATE TABLE CHUNGCHI (
 INSERT INTO TAIKHOAN (MA_TK, TEN_DANGNHAP, MATKHAU) VALUES
 ('TK001', 'admin1', 'adminpass1'),
 ('TK002', 'admin2', 'adminpass2'),
-('TK003', 'admin3', 'adminpass3'),
-('TK004', 'kh1', 'khpass1'),
-('TK005', 'kh2', 'khpass2'),
-('TK006', 'kh3', 'khpass3');
+('TK003', 'admin3', 'adminpass3');
 
 -- Insert vào PHONGTHI
 INSERT INTO PHONGTHI (MA_PHONG, TEN_PHONG, SUCCHUA, DIADIEM) VALUES
@@ -232,9 +229,9 @@ INSERT INTO NHANVIEN (MA_NV, HOTEN, NGAYSINH, GIOITINH, SDT, EMAIL, DIACHI, LOAI
 
 -- Insert vào KHACHHANG (Tên tiếng Việt đầy đủ, email dựa trên tên)
 INSERT INTO KHACHHANG (MA_KH, TEN_KH, EMAIL, SDT, LOAI_KH, MA_TK) VALUES
-('KH001', 'Lê Thị Hồng Nhung', 'nhunglth@gmail.com', '0988111222', 'Cá nhân', 'TK004'),
-('KH002', 'Nguyễn Minh Tuấn', 'tuannm@gmail.com', '0977222333', 'Cá nhân', 'TK005'),
-('KH003', 'Trần Văn Khánh', 'khanhtv@gmail.com', '0966333444', 'Đơn vị', 'TK006');
+('KH001', 'Lê Thị Hồng Nhung', 'nhunglth@gmail.com', '0988111222', 'Cá nhân', NULL),
+('KH002', 'Nguyễn Minh Tuấn', 'tuannm@gmail.com', '0977222333', 'Cá nhân', NULL),
+('KH003', 'Trần Văn Khánh', 'khanhtv@gmail.com', '0966333444', 'Đơn vị', NULL);
 
 -- Insert vào LICHTHI
 INSERT INTO LICHTHI (MA_LICHTHI, NGAYTHI, GIOTHI, LOAI_DANHGIA, SOLUONG_DANGKY, MA_PHONG) VALUES
