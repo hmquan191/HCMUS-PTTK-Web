@@ -242,7 +242,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Ngày Dự Thi</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
                 {chungChiList.length > 0 ? (
                   chungChiList.map((chungChi) => (
                     <TableRow
