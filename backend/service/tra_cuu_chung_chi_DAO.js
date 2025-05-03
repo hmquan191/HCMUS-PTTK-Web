@@ -1,31 +1,40 @@
-// service/tra_cuu_chung_chi_DAO.js
 import { pool } from '../database.js';
 
 class TraCuuChungChi_DAO {
-  // Get all certificates (CHUNGCHI)
-  async getAllCertificates() {
+  async getAllPhieuDuThi() {
     const sql = `
-      SELECT c.MA_CHUNGCHI, c.TENCHUNGCHI, c.NGAYCAP, c.NGAYHETHAN, c.TRANGTHAINHAN, 
-             c.KETQUA, c.DIEMSO, c.MA_PHIEUDUTHI, k.TEN_KH, l.NGAYTHI AS EXAM_DATE
-      FROM CHUNGCHI c
-      JOIN PHIEUDUTHI p ON c.MA_PHIEUDUTHI = p.MA_PHIEUDUTHI
-      JOIN KHACHHANG k ON c.MA_KH = k.MA_KH
-      JOIN LICHTHI l ON p.MA_LICHTHI = l.MA_LICHTHI
+      SELECT p.MA_PHIEUDUTHI, p.LAN_GIAHAN, p.MA_PHIEUDANGKY, p.NV_LAP, p.MA_LICHTHI, p.MA_TS,
+             l.NGAYTHI, l.GIOTHI, l.LOAI_DANHGIA, l.SOLUONG_DANGKY, l.MA_PHONG
+      FROM PHIEUDUTHI p
+      LEFT JOIN LICHTHI l ON p.MA_LICHTHI = l.MA_LICHTHI
     `;
     try {
       const [results] = await pool.query(sql);
       return results;
     } catch (err) {
-      console.error('Error fetching certificates:', err);
+      console.error('Error fetching PhieuDuThi:', err);
       throw err;
     }
   }
 
-  // Get a certificate by MA_PHIEUDUTHI
+  async getAllMaChungChi() {
+    const sql = `
+      SELECT MA_CHUNGCHI
+      FROM CHUNGCHI
+    `;
+    try {
+      const [results] = await pool.query(sql);
+      return results;
+    } catch (err) {
+      console.error('Error fetching MA_CHUNGCHI list:', err);
+      throw err;
+    }
+  }
+
   async DocMaPhieuDuThiTonTai(maPhieuDuThi) {
     const sql = `
       SELECT c.MA_CHUNGCHI, c.TENCHUNGCHI, c.NGAYCAP, c.NGAYHETHAN, c.TRANGTHAINHAN, 
-             c.KETQUA, c.DIEMSO, c.MA_PHIEUDUTHI, k.TEN_KH, l.NGAYTHI AS EXAM_DATE
+             c.KETQUA, c.DIEMSO, c.MA_PHIEUDUTHI, k.TEN_KH, l.NGAYTHI AS NGAYBYTHI
       FROM CHUNGCHI c
       JOIN PHIEUDUTHI p ON c.MA_PHIEUDUTHI = p.MA_PHIEUDUTHI
       JOIN KHACHHANG k ON c.MA_KH = k.MA_KH
@@ -34,18 +43,17 @@ class TraCuuChungChi_DAO {
     `;
     try {
       const [results] = await pool.query(sql, [maPhieuDuThi]);
-      return results.length > 0 ? results[0] : null;
+      return results;
     } catch (err) {
       console.error('Error fetching certificate by MA_PHIEUDUTHI:', err);
       throw err;
     }
   }
 
-  // Get a certificate by MA_CHUNGCHI
   async getCertificateByCode(maChungChi) {
     const sql = `
       SELECT c.MA_CHUNGCHI, c.TENCHUNGCHI, c.NGAYCAP, c.NGAYHETHAN, c.TRANGTHAINHAN, 
-             c.KETQUA, c.DIEMSO, c.MA_PHIEUDUTHI, k.TEN_KH, l.NGAYTHI AS EXAM_DATE
+             c.KETQUA, c.DIEMSO, c.MA_PHIEUDUTHI, k.TEN_KH, l.NGAYTHI AS NGAYBYTHI
       FROM CHUNGCHI c
       JOIN PHIEUDUTHI p ON c.MA_PHIEUDUTHI = p.MA_PHIEUDUTHI
       JOIN KHACHHANG k ON c.MA_KH = k.MA_KH
@@ -54,14 +62,13 @@ class TraCuuChungChi_DAO {
     `;
     try {
       const [results] = await pool.query(sql, [maChungChi]);
-      return results.length > 0 ? results[0] : null;
+      return results;
     } catch (err) {
       console.error('Error fetching certificate by MA_CHUNGCHI:', err);
       throw err;
     }
   }
 
-  // Update certificate status (e.g., TRANGTHAINHAN)
   async updateCertificateStatus(maChungChi, newStatus) {
     const updateSql = `
       UPDATE CHUNGCHI 
