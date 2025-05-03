@@ -3,7 +3,7 @@ import { pool } from '../database.js';
 class ThiSinh {
   async getThiSinhByKhachHang(maKhachHang) {
     const sql = `
-      SELECT MA_TS, HOTEN, NGAYSINH, GIOITINH, EMAIL, SDT, CCCD, DIACHI
+      SELECT t.MA_TS, t.HOTEN, t.NGAYSINH, t.GIOITINH, t.EMAIL, t.SDT, t.CCCD, t.DIACHI
       FROM THISINH t JOIN KHACHHANG k ON t.MA_KH = k.MA_KH
       WHERE t.MA_KH = ?
     `;

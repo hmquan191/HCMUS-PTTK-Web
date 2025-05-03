@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Autocomplete, Typography } from "@mui/material";
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Snackbar, Alert } from "@mui/material";
 
 const TrangDangKy = () => {
   //Biến lưu
@@ -65,17 +64,6 @@ const TrangDangKy = () => {
       showSnackbar('Error fetching candidates', 'error');
     }
   };  
-
-  const handleSubmit = () => {
-    const registrationData = {
-      customerId: selectedCustomer?.id,
-      examScheduleId: selectedExamSchedule?.id,
-      staffId: selectedStaff?.id,
-      status: selectedStatus?.id,
-    };
-    console.log("Dữ liệu lập phiếu:", registrationData);
-    // TODO: Gửi API lập phiếu hoặc xử lý theo yêu cầu
-  };
 
   const handleSelectCustomer = (customer) => {
     setSelectedCustomer(customer);
