@@ -2,6 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Button, Typography, Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 import axios from 'axios';
 
+// Helper function to format date to dd/mm/yyyy
+const formatDate = (dateString) => {
+  if (!dateString) return ''; // Handle null or undefined
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
 const CapChungChi = () => {
   const [phieuDuThiList, setPhieuDuThiList] = useState([]);
   const [selectedPhieuDuThi, setSelectedPhieuDuThi] = useState(null);
@@ -146,7 +156,7 @@ const CapChungChi = () => {
                       <TableCell>{phieu.MA_PHIEUDANGKY}</TableCell>
                       <TableCell>{phieu.NV_LAP}</TableCell>
                       <TableCell>{phieu.MA_LICHTHI}</TableCell>
-                      <TableCell>{phieu.NGAYTHI}</TableCell>
+                      <TableCell>{formatDate(phieu.NGAYTHI)}</TableCell>
                       <TableCell>{phieu.GIOTHI}</TableCell>
                       <TableCell>{phieu.LOAI_DANHGIA}</TableCell>
                     </TableRow>
@@ -241,11 +251,11 @@ const CapChungChi = () => {
                       <TableCell>{chungChi.TENCHUNGCHI}</TableCell>
                       <TableCell>{chungChi.KETQUA}</TableCell>
                       <TableCell>{chungChi.DIEMSO}</TableCell>
-                      <TableCell>{chungChi.NGAYCAP}</TableCell>
-                      <TableCell>{chungChi.NGAYHETHAN}</TableCell>
+                      <TableCell>{formatDate(chungChi.NGAYCAP)}</TableCell>
+                      <TableCell>{formatDate(chungChi.NGAYHETHAN)}</TableCell>
                       <TableCell>{chungChi.TRANGTHAINHAN}</TableCell>
                       <TableCell>{chungChi.TEN_KH}</TableCell>
-                      <TableCell>{chungChi.NGAYBYTHI}</TableCell>
+                      <TableCell>{formatDate(chungChi.NGAYBYTHI)}</TableCell>
                     </TableRow>
                   ))
                 ) : (
