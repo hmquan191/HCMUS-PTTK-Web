@@ -127,8 +127,8 @@ const CapChungChi = () => {
           </Typography>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#ffca28' }}>
+              <TableHead sx={{ backgroundColor: 'black' }}>
+                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
                   <TableCell><strong>Mã Phiếu Dự Thi</strong></TableCell>
                   <TableCell><strong>Lần Gia Hạn</strong></TableCell>
                   <TableCell><strong>Mã Phiếu Đăng Ký</strong></TableCell>
@@ -139,7 +139,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Loại Đánh Giá</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
                 {phieuDuThiList.length > 0 ? (
                   phieuDuThiList.map((phieu) => (
                     <TableRow
@@ -147,8 +147,7 @@ const CapChungChi = () => {
                       onClick={() => handleRowSelect(phieu)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#e0e0e0' : 'inherit',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        backgroundColor: selectedPhieuDuThi?.MA_PHIEUDUTHI === phieu.MA_PHIEUDUTHI ? '#FDC95F' : 'inherit',
                       }}
                     >
                       <TableCell>{phieu.MA_PHIEUDUTHI}</TableCell>
@@ -222,8 +221,8 @@ const CapChungChi = () => {
           </Typography>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#ffca28' }}>
+              <TableHead sx={{ backgroundColor: 'black' }}>
+                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
                   <TableCell><strong>Mã Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Tên Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Kết Quả</strong></TableCell>
@@ -235,7 +234,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Ngày Dự Thi</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
                 {chungChiList.length > 0 ? (
                   chungChiList.map((chungChi) => (
                     <TableRow
@@ -243,8 +242,7 @@ const CapChungChi = () => {
                       onClick={() => handleChungChiRowSelect(chungChi)}
                       sx={{
                         cursor: 'pointer',
-                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#e0e0e0' : 'inherit',
-                        '&:hover': { backgroundColor: '#f5f5f5' },
+                        backgroundColor: selectedChungChi?.MA_CHUNGCHI === chungChi.MA_CHUNGCHI ? '#FDC95F' : 'inherit',
                       }}
                     >
                       <TableCell>{chungChi.MA_CHUNGCHI}</TableCell>
