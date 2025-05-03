@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Snackbar, Alert } from "@mui/material";
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TextField, TableRow, Paper, Typography, Snackbar, Alert } from "@mui/material";
 
 const TrangDangKy = () => {
   //Biến lưu
@@ -62,6 +62,7 @@ const TrangDangKy = () => {
       }
     } catch (err) {
       showSnackbar('Error fetching candidates', 'error');
+      setCandidates([]);
     }
   };  
 
@@ -72,7 +73,8 @@ const TrangDangKy = () => {
       MA_KH: customer.MA_KH,
     });
     console.log("Khách hàng đã chọn:", customer);
-    fetchCandidates(customer.MA_KH);
+    //setCandidates([]);
+    //fetchCandidates(customer.MA_KH);
   };
 
   const handleSelectExamSchedules = (examSchedules) => {
@@ -132,6 +134,11 @@ const TrangDangKy = () => {
     } catch (err) {
       showSnackbar('Error creating registration', 'error');
     }
+  };
+
+  // Handle form input changes
+  const handleInputChange = (field, value) => {
+    setRegistrationData({ ...registrationData, [field]: value });
   };
 
   // Show snackbar notification
@@ -210,7 +217,7 @@ const TrangDangKy = () => {
           <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
             {candidates.map((candidates) => (
               <TableRow 
-                key={candidates.MA_LICHTHI} 
+                key={candidates.MA_TS} 
                 sx={{ 
                   "& .MuiTableCell-root": { textAlign: "center", }}}
               >
@@ -268,7 +275,14 @@ const TrangDangKy = () => {
           </TableBody>
         </Table>
       </TableContainer>
-
+      
+      <TextField
+        label="Mã phiếu đăng ký"
+        value={registrationData.MA_PHIEUDANGKY}
+        onChange={(e) => handleInputChange('MA_PHIEUDANGKY', e.target.value)}
+        required
+      />
+      
       <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <Button variant="contained" color="primary" sx={{ width: "fit-content" }} onClick={handleCreateRegistration}>
           Lập Phiếu

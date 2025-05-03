@@ -33,6 +33,17 @@ class PhieuDangKy {
       throw err;
     }
   }
+
+  async getAllPhieuDangKy() {
+    const sql = `SELECT * FROM PHIEUDANGKY`;
+    try {
+      const [results] = await pool.query(sql);
+      return results;
+    } catch (err) {
+      console.error('Error fetching PhieuDangKy:', err);
+      throw err;
+    }
+  }
 }
 
 export default PhieuDangKy;
