@@ -34,6 +34,16 @@ const TrangGiaHan = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
   const [isEligible, setIsEligible] = useState(null); // To store eligibility status
 
+  // Format date to dd/mm/yy
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
+  };
+
   // Fetch exam tickets (PHIEUDUTHI)
   const fetchExamTickets = async () => {
     try {
@@ -239,7 +249,7 @@ const TrangGiaHan = () => {
               >
                 <TableCell>{ticket.MA_PHIEUDUTHI}</TableCell>
                 <TableCell>{ticket.MA_PHIEUDANGKY}</TableCell>
-                <TableCell>{ticket.NGAYTHI}</TableCell>
+                <TableCell>{formatDate(ticket.NGAYTHI)}</TableCell>
                 <TableCell>{ticket.GIOTHI}</TableCell>
                 <TableCell>{ticket.LAN_GIAHAN}</TableCell>
               </TableRow>
@@ -273,7 +283,7 @@ const TrangGiaHan = () => {
                 <TableCell>{renewal.MA_PHIEUGIAHAN}</TableCell>
                 <TableCell>{renewal.MA_PHIEUDUTHI}</TableCell>
                 <TableCell>{renewal.LYDO_GIAHAN}</TableCell>
-                <TableCell>{renewal.NGAYLAP}</TableCell>
+                <TableCell>{formatDate( renewal.NGAYLAP)}</TableCell>
                 <TableCell>{renewal.TINHTRANG_THANHTOAN}</TableCell>
                 <TableCell>{renewal.PHIGIAHAN}</TableCell>
               </TableRow>
