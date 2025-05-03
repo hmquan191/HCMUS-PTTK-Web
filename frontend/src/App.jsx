@@ -8,7 +8,7 @@ import TrangGiaHan from './pages/TrangGiaHan';
 import TrangThanhToan from './pages/TrangThanhToan';
 import CapChungChi from './pages/CapChungChi';
 import TrangDangNhap from './pages/TrangDangNhap';
-import { AuthProvider } from './contexts/AuthContext';
+
 
 function App() {
   return (
