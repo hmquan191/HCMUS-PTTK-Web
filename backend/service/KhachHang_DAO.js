@@ -10,7 +10,7 @@ class KhachHang {
       const [results] = await pool.query(sql);
       return results;
     } catch (err) {
-      console.error('Error fetching KHACHHANG:', err);
+      console.error('Error fetching KhachHang:', err);
       throw err;
     }
   }

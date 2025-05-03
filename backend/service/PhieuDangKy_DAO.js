@@ -9,9 +9,6 @@ class PhieuDangKy {
       VALUES (?, ?, ?, ?, ?, ?)
     `;
     try {
-      // Start a transaction to ensure atomicity
-      await pool.query('START TRANSACTION');
-      
       // Insert the new PhieuDangKy record
       await pool.query(sql, [
         MA_PHIEUDANGKY,
@@ -21,7 +18,7 @@ class PhieuDangKy {
         MA_LICHTHI,
         MA_KH,
       ]);
-
+/*
       // Update SOLUONG_DANGKY in LICHTHI
       const updateSql = `
         UPDATE LICHTHI 
@@ -29,12 +26,9 @@ class PhieuDangKy {
         WHERE MA_LICHTHI = ?
       `;
       await pool.query(updateSql, [MA_LICHTHI]);
-      // Commit the transaction
-      await pool.query('COMMIT');
-
+*/
       return { success: true, message: 'Registration created successfully' };
     } catch (err) {
-      await pool.query('ROLLBACK');
       console.error('Error creating PhieuDangKy:', err);
       throw err;
     }
