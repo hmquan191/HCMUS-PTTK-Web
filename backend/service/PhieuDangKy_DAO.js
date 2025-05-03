@@ -18,15 +18,27 @@ class PhieuDangKy {
         MA_LICHTHI,
         MA_KH,
       ]);
-/*
-      // Update SOLUONG_DANGKY in LICHTHI
+
+      // Truy vấn để đếm số lượng thí sinh thuộc MA_KH
+      const countThiSinhSql = `
+        SELECT COUNT(*) AS soLuongThiSinh
+        FROM THISINH
+        WHERE MA_KH = ?
+      `;
+
+      // Cập nhật số lượng đăng ký trong LICHTHI dựa trên số lượng thí sinh
       const updateSql = `
         UPDATE LICHTHI 
-        SET SOLUONG_DANGKY = SOLUONG_DANGKY + 1 
+        SET SOLUONG_DANGKY = SOLUONG_DANGKY + ?
         WHERE MA_LICHTHI = ?
       `;
-      await pool.query(updateSql, [MA_LICHTHI]);
-*/
+      // 2. Đếm số lượng thí sinh thuộc MA_KH
+      const [countResult] = await pool.query(countThiSinhSql, [MA_KH]);
+      const soLuongThiSinh = countResult[0].soLuongThiSinh;
+
+      // 3. Cập nhật SOLUONG_DANGKY trong LICHTHI
+      await pool.query(updateSql, [soLuongThiSinh, MA_LICHTHI]);
+
       return { success: true, message: 'Registration created successfully' };
     } catch (err) {
       console.error('Error creating PhieuDangKy:', err);

@@ -8,7 +8,7 @@ const TrangDangKy = () => {
   //Danh sách
   const [customers, setCustomers] = useState([]);
   const [examSchedules, setExamSchedules] = useState([]);
-  const [candidates, setCandidates] = useState([]);
+  const [registrations, setRegistrations] = useState([]);
 
   const [registrationData, setRegistrationData] = useState({
     MA_PHIEUDANGKY: '',
@@ -50,21 +50,20 @@ const TrangDangKy = () => {
     }
   };
 
-  // Fetch candidates
-  const fetchCandidates = async (customerId) => {
+  // Fetch registrations
+  const fetchRegistrations = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/candidates?customerId=${customerId}`);
+      const response = await fetch('http://localhost:5000/api/registrations');
       const data = await response.json();
       if (response.ok) {
-        setCandidates(data);
+        setRegistrations(data);
       } else {
-        showSnackbar('Error fetching candidates', 'error');
+        showSnackbar('Error fetching registrations', 'error');
       }
     } catch (err) {
-      showSnackbar('Error fetching candidates', 'error');
-      setCandidates([]);
+      showSnackbar('Error fetching registrations', 'error');
     }
-  };  
+  };
 
   const handleSelectCustomer = (customer) => {
     setSelectedCustomer(customer);
@@ -73,8 +72,6 @@ const TrangDangKy = () => {
       MA_KH: customer.MA_KH,
     });
     console.log("Khách hàng đã chọn:", customer);
-    //setCandidates([]);
-    //fetchCandidates(customer.MA_KH);
   };
 
   const handleSelectExamSchedules = (examSchedules) => {
@@ -128,6 +125,7 @@ const TrangDangKy = () => {
         setSelectedExamSchedule(null);
         fetchCustomers(); // Refresh customer list
         fetchExamSchedules(); // Refresh exam schedule list
+        fetchRegistrations();
       } else {
         showSnackbar(data.message || 'Error creating registration', 'error');
       }
@@ -155,6 +153,7 @@ const TrangDangKy = () => {
   useEffect(() => {
     fetchCustomers();
     fetchExamSchedules();
+    fetchRegistrations();
   }, []);
 
   return (
@@ -172,6 +171,7 @@ const TrangDangKy = () => {
               <TableCell>Số điện thoại</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Loại khách hàng</TableCell>
+              <TableCell>Số lượng thí sinh</TableCell>
             </TableRow>
           </TableHead>
           <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
@@ -192,43 +192,7 @@ const TrangDangKy = () => {
                 <TableCell>{customer.SDT}</TableCell>
                 <TableCell>{customer.EMAIL}</TableCell>
                 <TableCell>{customer.LOAI_KH}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      {/* Bảng danh sách thí sinh */}
-      <Typography variant="h6" textAlign="left" mb={0.25}>Danh sách thí sinh</Typography>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead sx={{ backgroundColor: "black" }}>
-            <TableRow sx={{"& .MuiTableCell-root": { color: "white", textAlign: "center", } }}>
-              <TableCell>Mã thí sinh</TableCell>
-              <TableCell>Họ tên</TableCell>
-              <TableCell>Ngày sinh</TableCell>
-              <TableCell>Giới tính</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Số điện thoại</TableCell>
-              <TableCell>CCCD</TableCell>
-              <TableCell>Địa chỉ</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
-            {candidates.map((candidates) => (
-              <TableRow 
-                key={candidates.MA_TS} 
-                sx={{ 
-                  "& .MuiTableCell-root": { textAlign: "center", }}}
-              >
-                <TableCell>{candidates.MA_TS}</TableCell>
-                <TableCell>{candidates.HOTEN}</TableCell>
-                <TableCell>{new Date(candidates.NGAYSINH).toLocaleDateString("vi-VN")}</TableCell>
-                <TableCell>{candidates.GIOITINH}</TableCell>
-                <TableCell>{candidates.EMAIL}</TableCell>
-                <TableCell>{candidates.SDT}</TableCell>
-                <TableCell>{candidates.CCCD}</TableCell>
-                <TableCell>{candidates.DIACHI}</TableCell>
+                <TableCell>{customer.soLuongThiSinh}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -275,7 +239,40 @@ const TrangDangKy = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      
+
+      {/* Bảng danh sách phiếu đăng ký */}
+      <Typography variant="h6" textAlign="left" mb={0.25}>Danh sách phiếu đăng ký</Typography>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead sx={{ backgroundColor: "black" }}>
+            <TableRow sx={{"& .MuiTableCell-root": { color: "white", textAlign: "center", } }}>
+              <TableCell>Mã phiếu đăng ký</TableCell>
+              <TableCell>Ngày lập phiếu</TableCell>
+              <TableCell>Trạng thái</TableCell>
+              <TableCell>Nhân viên lập</TableCell>
+              <TableCell>Mã khách hàng</TableCell>
+              <TableCell>Mã lịch thi</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
+            {registrations.map((registrations) => (
+              <TableRow 
+                key={registrations.MA_PHIEUDANGKY} 
+                sx={{ 
+                  "& .MuiTableCell-root": { textAlign: "center", }}}
+              >
+                <TableCell>{registrations.MA_PHIEUDANGKY}</TableCell>
+                <TableCell>{new Date(registrations.NGAYLAP).toLocaleDateString("vi-VN")}</TableCell>
+                <TableCell>{registrations.TRANGTHAI_THANHTOAN}</TableCell>
+                <TableCell>{registrations.NV_LAP}</TableCell>
+                <TableCell>{registrations.MA_KH}</TableCell>
+                <TableCell>{registrations.MA_LICHTHI}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
       <TextField
         label="Mã phiếu đăng ký"
         value={registrationData.MA_PHIEUDANGKY}

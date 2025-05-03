@@ -2,13 +2,11 @@ import express from 'express';
 import PhieuDangKy from '../service/PhieuDangKy_DAO.js'; // Import the DAO class
 import KhachHang from '../service/KhachHang_DAO.js';
 import LichThi from '../service/LichThi_DAO.js';
-import ThiSinh from '../service/ThiSinh_DAO.js';
 
 const router = express.Router();
 const phieuDangKy = new PhieuDangKy();
 const khachHang = new KhachHang();
 const lichThi = new LichThi();
-const thiSinh = new ThiSinh();
 
 // Get list of KHACHHANG
 router.get('/customers', async (req, res) => {
@@ -32,16 +30,14 @@ router.get('/schedules', async (req, res) => {
   }
 });
 
-// Get list of THISINH from KHACHHANG
-router.get('/candidates', async (req, res) => {
-  const customerId = req.query.MA_KH;
-
+// Get list of PHIEUDANGKY
+router.get('/registrations', async (req, res) => {
   try {
-    const candidate = await thiSinh.getThiSinhByKhachHang(customerId);
-    res.status(200).json({candidate});
-  } catch (error) {
-    console.error('Error fetching THISINH:', error);
-    res.status(500).json({ message: 'Error fetching THISINH' });
+    const registration = await phieuDangKy.getAllPhieuDangKy();
+    res.status(200).json(registration);
+  } catch (err) {
+    console.error('Error fetching PHIEUDANGKY:', err);
+    res.status(500).json({ message: 'Error fetching PHIEUDANGKY' });
   }
 });
 
