@@ -40,11 +40,11 @@ router.get('/candidates', async (req, res) => {
     if (candidate) {
       res.status(200).json(candidate);
     } else {
-      res.status(404).json({ message: 'Registration ticket not found' });
+      res.status(404).json({ message: 'Candidates not found' });
     }
   } catch (err) {
-    console.error('Error searching registration:', err);
-    res.status(500).json({ message: 'Error searching registration ticket' });
+    console.error('Error searching candidates:', err);
+    res.status(500).json({ message: 'Error searching candidates' });
   }
 });
 
