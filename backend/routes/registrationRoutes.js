@@ -11,7 +11,7 @@ const lichThi = new LichThi();
 const thiSinh = new ThiSinh();
 
 // Get list of KHACHHANG
-router.get('/customer', async (req, res) => {
+router.get('/customers', async (req, res) => {
   try {
     const customer = await khachHang.getAllKhachHang();
     res.status(200).json(customer);
@@ -22,7 +22,7 @@ router.get('/customer', async (req, res) => {
 });
 
 // Get list of LICHTHI
-router.get('/schedule', async (req, res) => {
+router.get('/schedules', async (req, res) => {
   try {
     const schedule = await lichThi.getAllLichThi();
     res.status(200).json(schedule);
@@ -33,7 +33,7 @@ router.get('/schedule', async (req, res) => {
 });
 
 // Get list of THISINH
-router.get('/candidate', async (req, res) => {
+router.get('/candidates', async (req, res) => {
   try {
     const candidate = await thiSinh.getAllThiSinh();
     res.status(200).json(candidate);

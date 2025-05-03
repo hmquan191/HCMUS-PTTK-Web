@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Autocomplete, Typography } from "@mui/material";
 
 const TrangDangKy = () => {
+  //Biến lưu
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedExamSchedule, setSelectedExamSchedule] = useState(null);
-  const [selectedStaff, setSelectedStaff] = useState(null);
-  const [selectedStatus, setSelectedStatus] = useState(null);
-  const [note, setNote] = useState("");
+  //Danh sách
+  const [customers, setCustomers] = useState([]);
+  const [examSchedules, setExamSchedules] = useState([]);
+  const [candidates, setCandidates] = useState([]);
 
+  const [registrationData, setRegistrationData] = useState({
+    MA_PHIEUDANGKY: '',
+    NGAYLAP: new Date().toISOString().split('T')[0],
+    TRANGTHAI_THANHTOAN: 'Chờ thanh toán', // Default to non-null value
+    NV_LAP: 'NV001', // Replace with logged-in staff ID in production
+    MA_LICHTHI: '',
+    MA_KH: '',
+  });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+/*
   const customers = [
     { id: 1, name: "Nguyễn Văn A", phone: "0907087381", email: "nva@gmail.com", type: "Khách hàng tự do" },
     { id: 2, name: "Trần Thị B", phone: "0907087381", email: "ttb@gmail.com", type: "Khách hàng đơn vị" },
@@ -31,6 +44,51 @@ const TrangDangKy = () => {
     { id: "paid", label: "Đã thanh toán" },
     // thêm dữ liệu trạng thái
   ];
+*/
+  // Fetch customers
+  const fetchCustomers = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/customers');
+      const data = await response.json();
+      if (response.ok) {
+        setCustomers(data);
+      } else {
+        showSnackbar('Error fetching customers', 'error');
+      }
+    } catch (err) {
+      showSnackbar('Error fetching customers', 'error');
+    }
+  };
+
+  // Fetch examschedules
+  const fetchExamSchedules = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/schedules');
+      const data = await response.json();
+      if (response.ok) {
+        setExamSchedules(data);
+      } else {
+        showSnackbar('Error fetching exam schedules', 'error');
+      }
+    } catch (err) {
+      showSnackbar('Error fetching exam schedules', 'error');
+    }
+  };
+
+  // Fetch candidates
+  const fetchCandidates = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/candidates');
+      const data = await response.json();
+      if (response.ok) {
+        setCandidates(data);
+      } else {
+        showSnackbar('Error fetching candidates', 'error');
+      }
+    } catch (err) {
+      showSnackbar('Error fetching candidates', 'error');
+    }
+  };
 
   const handleSubmit = () => {
     const registrationData = {
@@ -45,11 +103,19 @@ const TrangDangKy = () => {
 
   const handleSelectCustomer = (customer) => {
     setSelectedCustomer(customer);
+    setRegistrationData({
+      ...registrationData,
+      MA_KH: customer.MA_KH,
+    });
     console.log("Khách hàng đã chọn:", customer);
   };
 
   const handleSelectExamSchedules = (examSchedules) => {
     setSelectedExamSchedule(examSchedules);
+    setRegistrationData({
+      ...registrationData,
+      MA_LICHTHI: examSchedules.MA_LICHTHI,
+    });
     console.log("Lịch thi đã chọn:", examSchedules);
   };
 
@@ -73,21 +139,21 @@ const TrangDangKy = () => {
           <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
             {customers.map((customer) => (
               <TableRow 
-                key={customer.id} 
+                key={customer.MA_KH} 
                 hover
                 onClick={() => handleSelectCustomer(customer)}
                 
                 sx={{ 
                   "& .MuiTableCell-root": { textAlign: "center", },
                   cursor: "pointer",
-                  backgroundColor: selectedCustomer?.id === customer.id ? "#FDC95F" : "inherit", 
+                  backgroundColor: selectedCustomer?.MA_KH === customer.MA_KH ? "#FDC95F" : "inherit", 
                 }}
               >
-                <TableCell>{customer.id}</TableCell>
-                <TableCell>{customer.name}</TableCell>
-                <TableCell>{customer.phone}</TableCell>
-                <TableCell>{customer.email}</TableCell>
-                <TableCell>{customer.type}</TableCell>
+                <TableCell>{customer.MA_KH}</TableCell>
+                <TableCell>{customer.TEN_KH}</TableCell>
+                <TableCell>{customer.SDT}</TableCell>
+                <TableCell>{customer.EMAIL}</TableCell>
+                <TableCell>{customer.LOAI_KH}</TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -110,42 +176,26 @@ const TrangDangKy = () => {
           <TableBody sx={{ backgroundColor: "#F7F7F7" }}>
             {examSchedules.map((examSchedules) => (
               <TableRow 
-                key={examSchedules.id} 
+                key={examSchedules.MA_LICHTHI} 
                 hover
                 onClick={() => handleSelectExamSchedules(examSchedules)}
                 
                 sx={{ 
                   "& .MuiTableCell-root": { textAlign: "center", },
                   cursor: "pointer",
-                  backgroundColor: selectedExamSchedule?.id === examSchedules.id ? "#FDC95F" : "inherit", // màu nền khi chọn
+                  backgroundColor: selectedExamSchedule?.MA_LICHTHI === examSchedules.MA_LICHTHI ? "#FDC95F" : "inherit", // màu nền khi chọn
                 }}
               >
-                <TableCell>{examSchedules.date}</TableCell>
-                <TableCell>{examSchedules.hour}</TableCell>
-                <TableCell>{examSchedules.type}</TableCell>
-                <TableCell>{examSchedules.number}</TableCell>
-                <TableCell>{examSchedules.room}</TableCell>
+                <TableCell>{examSchedules.NGAYTHI}</TableCell>
+                <TableCell>{examSchedules.GIOTHI}</TableCell>
+                <TableCell>{examSchedules.LOAI_DANHGIA}</TableCell>
+                <TableCell>{examSchedules.SOLUONG_DANGKY}</TableCell>
+                <TableCell>{examSchedules.TEN_PHONG}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
-      <Autocomplete
-        options={staffMembers}
-        getOptionLabel={(option) => option.name}
-        value={selectedStaff} 
-        onChange={(event, value) => setSelectedStaff(value)}
-        renderInput={(params) => <TextField {...params} label="Nhân viên lập phiếu" />}
-      />
-
-      <Autocomplete
-        options={statuses}
-        getOptionLabel={(option) => option.label}
-        value={selectedStatus} 
-        onChange={(event, value) => setSelectedStatus(value)}
-        renderInput={(params) => <TextField {...params} label="Trạng thái thanh toán" />}
-      />
 
       <Box sx={{ maxWidth: 800, mx: "auto", textAlign: "center", p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
         <Button variant="contained" color="primary" sx={{ width: "fit-content" }}>
