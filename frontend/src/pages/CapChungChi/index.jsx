@@ -62,12 +62,15 @@ const CapChungChi = () => {
       return;
     }
     try {
+      console.log('Searching for MA_PHIEUDUTHI:', maPhieuDuThiToSearch);
       const response = await axios.get(`http://localhost:5000/api/chungchi/${maPhieuDuThiToSearch}`);
+      console.log('Search response:', response.data);
       setChungChiList(response.data);
       setError('');
     } catch (err) {
       setError(err.response?.data?.message || 'Lỗi khi tra cứu chứng chỉ');
       setChungChiList([]);
+      console.error('Search error:', err.response?.data || err);
     }
   };
 
@@ -89,7 +92,7 @@ const CapChungChi = () => {
 
   // Handle update certificate status
   const handleUpdateStatus = async () => {
-    if (!selectedChungChi || selectedChungChi.TRANGTHAINHAN === 'Đã nhận') {
+    if (!selectedChungChi || selectedChungChi?.TRANGTHAINHAN === 'Đã nhận') {
       return;
     }
     try {
@@ -108,6 +111,12 @@ const CapChungChi = () => {
     } catch (err) {
       setError(err.response?.data?.message || 'Lỗi khi cập nhật trạng thái');
     }
+  };
+
+  // Handle row selection for ChungChi
+  const handleChungChiRowSelect = (chungChi) => {
+    setSelectedChungChi(chungChi);
+    console.log('Selected ChungChi:', chungChi);
   };
 
   return (
@@ -144,8 +153,8 @@ const CapChungChi = () => {
           </Box>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#ffca28' }}>
+              <TableHead sx={{ backgroundColor: 'black' }}>
+                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
                   <TableCell><strong>Mã Phiếu Dự Thi</strong></TableCell>
                   <TableCell><strong>Lần Gia Hạn</strong></TableCell>
                   <TableCell><strong>Mã Phiếu Đăng Ký</strong></TableCell>
@@ -156,7 +165,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Loại Đánh Giá</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
                 {phieuDuThiList.length > 0 ? (
                   phieuDuThiList.map((phieu) => (
                     <TableRow
@@ -230,8 +239,8 @@ const CapChungChi = () => {
           </Typography>
           <TableContainer component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: '#ffca28' }}>
+              <TableHead sx={{ backgroundColor: 'black' }}>
+                <TableRow sx={{ '& .MuiTableCell-root': { color: 'white', textAlign: 'center' } }}>
                   <TableCell><strong>Mã Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Tên Chứng Chỉ</strong></TableCell>
                   <TableCell><strong>Kết Quả</strong></TableCell>
@@ -243,7 +252,7 @@ const CapChungChi = () => {
                   <TableCell><strong>Ngày Dự Thi</strong></TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              <TableBody sx={{ backgroundColor: '#F7F7F7' }}>
                 {chungChiList.length > 0 ? (
                   chungChiList.map((chungChi) => (
                     <TableRow
@@ -278,7 +287,7 @@ const CapChungChi = () => {
             variant="contained"
             color="primary"
             onClick={handleUpdateStatus}
-            disabled={!selectedChungChi || selectedChungChi.TRANGTHAINHAN === 'Đã nhận'}
+            disabled={!selectedChungChi || selectedChungChi?.TRANGTHAINHAN === 'Đã nhận'}
             sx={{ mt: 2 }}
           >
             Cập nhật
